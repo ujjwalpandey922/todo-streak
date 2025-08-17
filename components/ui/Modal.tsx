@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 type ModalProp = {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ const Modal: React.FC<ModalProp> = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[50%]">
+      <DialogContent className="sm:max-w-[75%]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>

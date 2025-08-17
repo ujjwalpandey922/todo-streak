@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
 // Importing necessary UI components and utilities
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "../ui/checkbox";
-import { format } from "date-fns"; // Utility to format dates
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '../ui/checkbox';
+import { format } from 'date-fns'; // Utility to format dates
 import {
   Select,
   SelectContent,
@@ -13,11 +13,11 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { Todo } from "@/models"; // Type definition for Todo object
-import { items } from "@/constants"; // Constants for days of the week or other items
-import { useTodoForm } from "@/hooks/useTodoForm"; // Custom hook for managing todo form state
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Todo } from '@/models'; // Type definition for Todo object
+import { items } from '@/constants'; // Constants for days of the week or other items
+import { useTodoForm } from '@/hooks/useTodoForm'; // Custom hook for managing todo form state
 
 // Define the props for the AddTodo component
 type AddTodoProps = {
@@ -41,50 +41,57 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
     if (setOpen) setOpen(false); // Close the modal if setOpen is provided
   };
 
-  console.log({ todo }); // Log the current state of the todo for debugging
+  // console.log({ todo }); // Log the current state of the todo for debugging
 
   return (
     <form
       onSubmit={handleSaveTodo}
-      className="flex flex-col gap-4 max-w-[75%] w-full mx-auto"
+      className="flex flex-col gap-4 sm:max-w-[75%] w-full mx-auto"
     >
-      {/* // TITLE INPUT */}
-      <Label htmlFor="title">Enter Your Todo Title</Label>
-      <Input
-        type="text"
-        value={todo.title} // Controlled input value bound to todo.title
-        onChange={(e) => setTodo((pre) => ({ ...pre, title: e.target.value }))} // Update title in state
-        placeholder="Enter a new todo"
-      />
-
-      {/* // TYPE SELECTOR */}
-      <Label htmlFor="type">Select Tracking Type</Label>
-      <Select
-        value={todo?.settings?.trackingType} // Controlled select value bound to trackingType
-        onValueChange={(e: "daily" | "weekly") => {
-          if (e) {
-            setTodo((pre) => ({
-              ...pre,
-              settings: { ...pre.settings, trackingType: e }, // Update trackingType in state
-            }));
-          }
-        }}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select Tracking Type" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Tracking Types</SelectLabel>
-            <SelectItem value="daily">Daily</SelectItem>
-            <SelectItem value="weekly">Weekly</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="w-full">
+          {/* // TITLE INPUT */}
+          <Label htmlFor="title">Enter Your Todo Title</Label>
+          <Input
+            type="text"
+            value={todo.title} // Controlled input value bound to todo.title
+            onChange={(e) =>
+              setTodo((pre) => ({ ...pre, title: e.target.value }))
+            } // Update title in state
+            placeholder="Enter a new todo"
+          />
+        </div>
+        <div className="w-full">
+          {/* // TYPE SELECTOR */}
+          <Label htmlFor="type">Select Tracking Type</Label>
+          <Select
+            value={todo?.settings?.trackingType} // Controlled select value bound to trackingType
+            onValueChange={(e: 'daily' | 'weekly') => {
+              if (e) {
+                setTodo((pre) => ({
+                  ...pre,
+                  settings: { ...pre.settings, trackingType: e }, // Update trackingType in state
+                }));
+              }
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Tracking Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Tracking Types</SelectLabel>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       {/* BASED ON TYPE SELECTOR INPUT OR RADIO */}
-      {todo?.settings?.trackingType === "weekly" ? (
-        <>
+      {todo?.settings?.trackingType === 'weekly' ? (
+        <div>
           <Label htmlFor="type">Select Your Weekly Target</Label>
           <Input
             type="number"
@@ -100,12 +107,12 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
             }
             placeholder="Weekly Target"
           />
-        </>
+        </div>
       ) : (
-        <div className="flex gap-6 flex-wrap justify-center">
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 justify-center">
           {items.map((item) => {
             return (
-              <div key={item.id} className="flex items-center gap-2">
+              <div key={item.id} className="flex items-center w-full gap-2">
                 <Checkbox
                   id={`days-${todo.id}-${item.id}`} // Unique ID for each day checkbox
                   className="hidden peer"
@@ -126,7 +133,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
                 />
                 {/* Label for each day checkbox */}
                 <Label
-                  className={`peer-aria-checked:border-blue-600 peer-aria-checked:text-blue-200  rounded px-4 py-2 text-sm cursor-pointer hover:scale-105 border`}
+                  className={`peer-aria-checked:border-blue-600 w-full peer-aria-checked:text-blue-200  rounded px-4 py-2 text-sm cursor-pointer hover:scale-105 border`}
                   htmlFor={`days-${todo.id}-${item.id}`}
                 >
                   {item.label}
@@ -137,21 +144,21 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
         </div>
       )}
 
-      {type === "edit" && updatedDays.length > 0 && (
-        <div className="flex flex-col gap-4">
+      {type === 'edit' && updatedDays.length > 0 && (
+        <div className="flex flex-col gap-4 my-8">
           <h1 className="text-lg font-bold text-center">
             Have you completed this task for the following dates?
           </h1>
-          <div className="flex gap-4 flex-wrap justify-between">
+          <div className="grid gap-4 sm:grid-cols-2 justify-center sm:justify-between">
             {updatedDays?.map((day) => {
               // Convert day to ISO string for comparison
-              const dayString = format(new Date(day), "yyyy-MM-dd");
+              const dayString = format(new Date(day), 'yyyy-MM-dd');
 
               // Check if the formatted day string is present in completedDates
               const isChecked = todo?.completedDates?.some((completedDate) => {
                 const formattedCompletedDate = format(
                   new Date(completedDate),
-                  "yyyy-MM-dd"
+                  'yyyy-MM-dd'
                 );
                 return formattedCompletedDate === dayString;
               });
@@ -170,7 +177,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
                               (completedDate) =>
                                 format(
                                   new Date(completedDate),
-                                  "yyyy-MM-dd"
+                                  'yyyy-MM-dd'
                                 ) !== dayString
                             ); // Filter out the unchecked date
 
@@ -184,9 +191,9 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
                   {/* Label for each completed date checkbox */}
                   <label
                     htmlFor={`completed-${todo.id}-${dayString}`}
-                    className="peer-aria-checked:border-blue-600 peer-aria-checked:text-blue-200 rounded px-4 py-2 text-sm cursor-pointer hover:scale-105 border"
+                    className="peer-aria-checked:border-blue-600 w-full peer-aria-checked:text-blue-200 rounded px-4 py-2 text-sm cursor-pointer hover:scale-105 border"
                   >
-                    {format(day, "PPPPPP")}
+                    {format(day, 'PPPPPP')}
                   </label>
                 </div>
               );
@@ -197,7 +204,7 @@ const AddTodo: React.FC<AddTodoProps> = ({ todoInfo, type, setOpen }) => {
 
       {/* Submit button for form */}
       <Button type="submit">
-        {type === "edit" ? "Edit Todo" : "Add Todo"}
+        {type === 'edit' ? 'Edit Todo' : 'Add Todo'}
       </Button>
     </form>
   );
